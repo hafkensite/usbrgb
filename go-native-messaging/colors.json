@@ -1,0 +1,7 @@
+{
+    "name": "colors",
+    "description": "Example host for native messaging",
+    "path": "/home/jasper/bin/usbrgb-native-messaging",
+    "type": "stdio",
+    "allowed_extensions": [ "colors@hafcom.nl" ]
+  }
