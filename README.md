@@ -1,6 +1,6 @@
 # usbrgb
 
-Attiny85 based usb pcb that provides two rgb led's, to be used as indicators.
+Attiny85 based USB PCB that provides two WS2812B LED's, to be used as indicators.
 
 # Hardware
 
@@ -14,9 +14,9 @@ Removing the regulator, and a few other non-critical components allowed the boar
 
 ## Layout
 
-[! PCB](./eagle-pcb/top-pcb.png)
+![PCB](./eagle-pcb/top-pcb.png)
 
-[! Schematic](./eagle-pcb/schematic.png)
+![Schematic](./eagle-pcb/schematic.png)
 
 ## Components
 
@@ -48,7 +48,7 @@ The provided application used the DigisparkCDC library to emulate a serial devic
 
 # Host software
 
-The provided arduino code acts as a serial interface. When 3 bytes are sent, they will be read as RGB value and both led's will be set to that color. If 6 bytes are sent, the first 3 are for the top LED, the second 3 for the bottom.
+The provided arduino code acts as a serial interface. When 3 bytes are sent, they will be read as RGB value and both LED's will be set to that color. If 6 bytes are sent, the first 3 are for the top LED, the second 3 for the bottom.
 
 ## Shell script
 The provided `colors.sh` shows how to set a color. An other option is to send some random values using `head -c3 /dev/urandom > /dev/ttyACM0`
@@ -59,4 +59,4 @@ The goal of this project is to be able to give a notification from within a brow
 This project contains a small GO application that can read the messages from the browser, and send the 3 byte values to the serial interface.
 
 ## Browser integration
-
+The included firefox extension, together with the native-messaging application, allows the LED's to be set from within a web-page.
