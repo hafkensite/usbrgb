@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="9.6.1">
+<eagle version="9.6.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -6845,17 +6845,12 @@ Source: AVX .. aphvc.pdf</description>
 <wire x1="76.2" y1="35.56" x2="76.2" y2="20.32" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="RESET/LED" class="0">
+<net name="RESET" class="0">
 <segment>
-<pinref part="D3" gate="G$1" pin="DI"/>
-<wire x1="127" y1="27.94" x2="124.46" y2="27.94" width="0.1524" layer="91"/>
-<wire x1="127" y1="33.02" x2="127" y2="27.94" width="0.1524" layer="91"/>
 <pinref part="IC1" gate="G$1" pin="PB5(NRES)"/>
-<wire x1="73.66" y1="33.02" x2="119.38" y2="33.02" width="0.1524" layer="91"/>
-<pinref part="J1" gate="G$1" pin="6"/>
-<wire x1="119.38" y1="33.02" x2="127" y2="33.02" width="0.1524" layer="91"/>
-<wire x1="119.38" y1="43.18" x2="119.38" y2="33.02" width="0.1524" layer="91"/>
-<junction x="119.38" y="33.02"/>
+<wire x1="73.66" y1="33.02" x2="104.14" y2="33.02" width="0.1524" layer="91"/>
+<pinref part="J1" gate="G$1" pin="5"/>
+<wire x1="104.14" y1="43.18" x2="104.14" y2="33.02" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$2" class="0">
@@ -6873,15 +6868,23 @@ Source: AVX .. aphvc.pdf</description>
 <wire x1="83.82" y1="40.64" x2="83.82" y2="35.56" width="0.1524" layer="91"/>
 <wire x1="83.82" y1="35.56" x2="124.46" y2="35.56" width="0.1524" layer="91"/>
 <pinref part="J1" gate="G$1" pin="4"/>
-<wire x1="124.46" y1="35.56" x2="124.46" y2="43.18" width="0.1524" layer="91"/>
-<wire x1="124.46" y1="43.18" x2="119.38" y2="45.72" width="0.1524" layer="91"/>
+<wire x1="124.46" y1="35.56" x2="124.46" y2="45.72" width="0.1524" layer="91"/>
+<wire x1="124.46" y1="45.72" x2="119.38" y2="45.72" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="MISO" class="0">
 <segment>
 <pinref part="IC1" gate="G$1" pin="PB1(MISO)"/>
-<pinref part="J1" gate="G$1" pin="5"/>
-<wire x1="73.66" y1="43.18" x2="104.14" y2="43.18" width="0.1524" layer="91"/>
+<wire x1="73.66" y1="43.18" x2="96.52" y2="43.18" width="0.1524" layer="91"/>
+<wire x1="96.52" y1="43.18" x2="96.52" y2="38.1" width="0.1524" layer="91"/>
+<wire x1="96.52" y1="38.1" x2="119.38" y2="38.1" width="0.1524" layer="91"/>
+<pinref part="D3" gate="G$1" pin="DI"/>
+<wire x1="119.38" y1="38.1" x2="127" y2="38.1" width="0.1524" layer="91"/>
+<wire x1="127" y1="27.94" x2="124.46" y2="27.94" width="0.1524" layer="91"/>
+<wire x1="127" y1="38.1" x2="127" y2="27.94" width="0.1524" layer="91"/>
+<pinref part="J1" gate="G$1" pin="6"/>
+<wire x1="119.38" y1="43.18" x2="119.38" y2="38.1" width="0.1524" layer="91"/>
+<junction x="119.38" y="38.1"/>
 </segment>
 </net>
 <net name="SDA/MOSI" class="0">
