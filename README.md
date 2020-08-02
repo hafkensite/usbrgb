@@ -1,6 +1,8 @@
 # usbrgb
 
-Attiny85 based USB PCB that provides two WS2812B LED's, to be used as indicators.
+ATtiny85 based USB PCB that provides two WS2812B LED's, to be used as indicators.
+
+![PCB](./eagle-pcb/photo-v1.png)
 
 # Hardware
 
@@ -36,27 +38,20 @@ The [micronucleus](https://github.com/micronucleus/micronucleus) bootloader allo
 
 When the chip boots, it first presents itself as a usb device that can be programmed. After a short timeout the bootloader starts the Arduino code.
 
-To flash the micronucleus bootloader you can use [avrdude](https://www.nongnu.org/avrdude/). I have programmed mine using a arduino uno with the ISP sketch written to it.
+To flash the micronucleus bootloader you can use [avrdude](https://www.nongnu.org/avrdude/). I have programmed mine using an Arduino uno with the ISP sketch written to it.
 
 ## Arduino
 
 To program the device using Arduino you can follow the steps describe in the [tutorial](http://digistump.com/wiki/digispark/tutorials/connecting).
 
-The provided application used the DigisparkCDC library to emulate a serial device.
-
-> Note that the latest micronucleus version currently available (v2.04) is not supported by the arduino plugin. I replaced the micronucleus application with the [latest version](https://github.com/micronucleus/micronucleus/tree/master/commandline), which works fine.
+> Note that the latest micronucleus version currently available (v2.04) is not supported by the Arduino plugin. I replaced the micronucleus application with the [latest version](https://github.com/micronucleus/micronucleus/tree/master/commandline), which works fine.
 
 # Host software
 
-The provided arduino code acts as a serial interface. When 3 bytes are sent, they will be read as RGB value and both LED's will be set to that color. If 6 bytes are sent, the first 3 are for the top LED, the second 3 for the bottom.
-
-## Shell script
-The provided `colors.sh` shows how to set a color. An other option is to send some random values using `head -c3 /dev/urandom > /dev/ttyACM0`
+The host application is written in Go, and uses the libusb interface to send control messages to the HID device. 
 
 ## Native messaging
 The goal of this project is to be able to give a notification from within a browser. One of the ways to communicate from a browser to the host is using [native messaging](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_messaging). This allows extensions to send messages to an executable on the host.
-
-This project contains a small GO application that can read the messages from the browser, and send the 3 byte values to the serial interface.
 
 ## Browser integration
 The included firefox extension, together with the native-messaging application, allows the LED's to be set from within a web-page.

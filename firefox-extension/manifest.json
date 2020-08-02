@@ -25,7 +25,7 @@
 
   "content_scripts": [
     {
-      "matches": ["*://*.hafcom.nl/*"],
+      "matches": ["https://5f215ae53cbfec0008a5e364--webphone-dev.netlify.app/*"],
       "js": ["content-script.js"]
     }
   ],

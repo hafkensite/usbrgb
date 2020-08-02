@@ -9,7 +9,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/tarm/serial"
+	"github.com/google/gousb"
 )
 
 type input string
@@ -78,83 +78,99 @@ func readNativeMessage() (*input, error) {
 	return &i, nil
 }
 
-func main() {
-	f, err := os.OpenFile("/tmp/testlogfile", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+func setColor(device *gousb.Device, color []byte) error {
+	var err error
+	for x := 0; x < 100; x++ {
+		_, err := device.Control(gousb.ControlVendor|gousb.ControlDevice|gousb.ControlOut, 0, uint16(color[1])*256+uint16(color[0]), uint16(color[2]), []byte{})
+		if err == nil {
+			// log.Println("device.Control")
+			// log.Print(err)
+			break
+		}
+		time.Sleep(time.Millisecond * 1)
+	}
 	if err != nil {
+		return err
+	}
+
+	for x := 0; x < 100; x++ {
+		_, err := device.Control(gousb.ControlVendor|gousb.ControlDevice|gousb.ControlOut, 1, uint16(color[1])*256+uint16(color[0]), uint16(color[2]), []byte{})
+		if err == nil {
+			// log.Println("device.Control")
+			// log.Print(err)
+			break
+		}
+		time.Sleep(time.Millisecond * 1)
+	}
+	return err
+}
+
+func main() {
+
+	f, err := os.OpenFile("/tmp/testlogfile", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	log.SetOutput(f)
+	ctx := gousb.NewContext()
+	defer ctx.Close()
+
+	device, err := ctx.OpenDeviceWithVIDPID(0x16c0, 0x05df)
+	if err != nil {
+		// f.WriteString(err.Error())
 		log.Fatal(err)
+		return
 	}
-	defer f.Close()
+	if device == nil {
+		log.Fatal("Device not found")
+		return
+	}
 
-	for i := 0; i < 255; i += 32 {
+	for i := 0; i < 255; i += 8 {
 		rgb := make([]byte, 3)
 		rgb[0] = byte(i)
 		rgb[1] = 0
 		rgb[2] = 0
-		err = writeRGB(rgb)
-		if err != nil {
-			log.Fatal(err)
-		}
-		time.Sleep(time.Millisecond * 100)
+		err = setColor(device, rgb)
+		// if err != nil {
+		// 	log.Fatal(err)
+		// }
+		time.Sleep(time.Millisecond * 10)
 	}
 
-	for i := 255; i >= 0; i -= 32 {
+	for i := 255; i >= 0; i -= 8 {
 		rgb := make([]byte, 3)
 		rgb[0] = byte(i)
 		rgb[1] = 0
 		rgb[2] = 0
-		err = writeRGB(rgb)
-		if err != nil {
-			log.Fatal(err)
-		}
-		time.Sleep(time.Millisecond * 100)
+		err = setColor(device, rgb)
+		// if err != nil {
+		// 	log.Fatal(err)
+		// }
+		time.Sleep(time.Millisecond * 10)
 	}
 
 	rgb := make([]byte, 3)
 	rgb[0] = 0
 	rgb[1] = 0
 	rgb[2] = 0
-	err = writeRGB(rgb)
+	err = setColor(device, rgb)
 
 	for true {
 		i, err := readNativeMessage()
 		if err != nil {
-			f.WriteString(err.Error())
+			log.Print(err.Error())
 			return
 		}
 
 		rgb, err := getRGB(*i)
 		if err != nil {
-			f.WriteString(err.Error())
+			log.Print(err.Error())
 			return
 		}
 
-		err = writeRGB(rgb)
+		err = setColor(device, rgb)
 		if err != nil {
-			f.WriteString(err.Error())
+			log.Print(err.Error())
 			return
 		}
 	}
 }
 
-func writeRGB(rgb []byte) error {
-	c := &serial.Config{Name: "/dev/ttyACM0", Baud: 9600}
-	log.Println("Opening port")
-	s, err := serial.OpenPort(c)
-	if err != nil {
-		return err
-	}
-	log.Printf("Writing %d bytes\n", len(rgb))
-	num, err := s.Write(rgb)
-	if err != nil {
-		return err
-	}
-	if num != len(rgb) {
-		return fmt.Errorf("Did not write all %d bytes, only %d", len(rgb), num)
-	}
-	log.Println("Closing port")
-	err = s.Close()
-	if err != nil {
-		return err
-	}
-	return nil
-}
